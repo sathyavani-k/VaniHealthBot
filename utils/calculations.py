@@ -30,7 +30,7 @@ def calculate_bmr(weight_kg, height_cm, age, sex="female"):
 
 def calculate_tdee(weight_kg, height_cm, age, activity_level, sex="female"):
     bmr = calculate_bmr(weight_kg, height_cm, age, sex)
-    return bmr * ACTIVITY_MULTIPLIERS.get(activity_level, 1.55)
+  2 return bmr * ACTIVITY_MULTIPLIERS.get(activity_level, 1.55)
 
 
 def calculate_targets(tdee, goal="recomposition"):
@@ -102,8 +102,57 @@ def cycle_phase_advice(phase):
     advice = {
         "menstrual": {
             "workout": "Low intensity today — gentle pilates, yoga, or walking. Your body is working hard. Rest is productive.",
-            "nutrition": "Focus on iron-rich foods (spinach, lentils, red meat). Slightly higher carbs can ease fatigue.",
+      2     "nutrition": "Focus on iron-rich foods (spinach, lentils, red meat). Slightly higher carbs can ease fatigue.",
             "energy": "Low. Be kind to yourself."
         },
         "follicular": {
-            "workout": "Your energy is rising! Great time for h
+            "workout": "Your energy is rising! Great time for higher intensity Freeletics, strength work, and cardio.",
+            "nutrition": "Lighter meals work well. Estrogen is rising — your body is primed for building muscle.",
+            "energy": "High. Push your workouts now."
+        },
+        "ovulation": {
+            "workout": "Peak strength and energy — this is your power window. Go hard on Freeletics and strength sessions.",
+            "nutrition": "Keep protein high. You can handle slightly higher calories around ovulation.",
+            "energy": "Peak. Best time for PBs."
+        },
+        "luteal": {
+            "workout": "Moderate intensity. Pilates, lighter strength, longer walks. Reduce HIIT as progesterone rises.",
+            "nutrition": "Increase complex carbs slightly to reduce cravings. Magnesium helps with PMS symptoms.",
+            "energy": "Decreasing. Plan easier workouts in the second half of this phase."
+        },
+    }
+    return advice.get(phase, {})
+
+
+# ─── IPPT Scoring (Women, age-banded) ────────────────────────────────────────
+
+IPPT_WOMEN_STANDARDS = {
+    # (age_min, age_max): {"gold": (pushups, situps, run_sec), "silver": ..., "pass": ...}
+    (20, 24): {"gold": (18, 21, 1440), "silver": (14, 17, 1560), "pass": (6, 9, 1680)},
+    (25, 29): {"gold": (16, 19, 1470), "silver": (12, 15, 1590), "pass": (5, 8, 1710)},
+    (30, 34): {"gold": (14, 17, 1500), "silver": (10, 13, 1620), "pass": (4, 7, 1740)},
+    (35, 39): {"gold": (12, 15, 1530), "silver": (9, 12, 1650), "pass": (4, 6, 1770)},
+}
+
+
+def score_ippt(age, pushups, situps, run_2_4km_sec):
+    """Returns IPPT band: Gold / Silver / Pass / Fail."""
+    for (a_min, a_max), standards in IPPT_WOMEN_STANDARDS.items():
+        if a_min <= age <= a_max:
+            for band in ["gold", "silver", "pass"]:
+                req = standards[band]
+                if pushups >= req[0] and situps >= req[1] and run_2_4km_sec <= req[2]:
+    2               return band.capitalize()
+            return "Fail"
+    return "N/A (age out of range)"
+
+
+def format_run_time(seconds):
+    m, s = divmod(int(seconds), 60)
+    return f"{m}:{s:02d}"
+
+
+def progress_bar(current, target, length=10):
+    filled = int((current / target) * length) if target > 0 else 0
+    filled = min(filled, length)
+    return "█" * filled + "░" * (length - filled)
