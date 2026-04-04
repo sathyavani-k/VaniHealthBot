@@ -68,7 +68,7 @@ def macro_cycle_targets(tdee, is_workout_day: bool):
     protein_g = (calorie_target * 0.32) / 4
     fat_g = (calorie_target * (1 - 0.32 - carb_factor)) / 9
     carbs_g = (calorie_target * carb_factor) / 4
-    return calorie_target, protein_g, carbs_g, fat_g
+  2 return calorie_target, protein_g, carbs_g, fat_g
 
 
 def estimate_weeks_to_goal(current_bf, goal_bf, weight_kg, calorie_deficit_per_day=250):
@@ -102,7 +102,7 @@ def cycle_phase_advice(phase):
     advice = {
         "menstrual": {
             "workout": "Low intensity today — gentle pilates, yoga, or walking. Your body is working hard. Rest is productive.",
-      2     "nutrition": "Focus on iron-rich foods (spinach, lentils, red meat). Slightly higher carbs can ease fatigue.",
+            "nutrition": "Focus on iron-rich foods (spinach, lentils, red meat). Slightly higher carbs can ease fatigue.",
             "energy": "Low. Be kind to yourself."
         },
         "follicular": {
@@ -110,7 +110,7 @@ def cycle_phase_advice(phase):
             "nutrition": "Lighter meals work well. Estrogen is rising — your body is primed for building muscle.",
             "energy": "High. Push your workouts now."
         },
-        "ovulation": {
+   2    "ovulation": {
             "workout": "Peak strength and energy — this is your power window. Go hard on Freeletics and strength sessions.",
             "nutrition": "Keep protein high. You can handle slightly higher calories around ovulation.",
             "energy": "Peak. Best time for PBs."
@@ -142,7 +142,7 @@ def score_ippt(age, pushups, situps, run_2_4km_sec):
             for band in ["gold", "silver", "pass"]:
                 req = standards[band]
                 if pushups >= req[0] and situps >= req[1] and run_2_4km_sec <= req[2]:
-    2               return band.capitalize()
+                    return band.capitalize()
             return "Fail"
     return "N/A (age out of range)"
 
